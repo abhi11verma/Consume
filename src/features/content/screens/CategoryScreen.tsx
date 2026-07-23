@@ -69,7 +69,7 @@ export function CategoryScreen({ type }: CategoryScreenProps) {
       ) : viewMode === 'grid' ? (
         <TileGrid items={items} type={type} />
       ) : (
-        <div className="flex flex-col gap-2 md:gap-0 md:rounded-2xl md:border md:border-[var(--color-border)] md:overflow-hidden">
+        <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden">
           {items.map((item) => (
             <ListRow key={item.id} item={item} density="compact" />
           ))}
