@@ -42,7 +42,7 @@ export function CategorySection({ type, items, limit = 8 }: CategorySectionProps
       {viewMode === 'grid' ? (
         <TileRow items={displayed} tileVariant={meta.tileVariant} />
       ) : (
-        <div className="-mx-2">
+        <div className="flex flex-col gap-2 md:gap-0 md:rounded-2xl md:border md:border-[var(--color-border)] md:overflow-hidden">
           {displayed.map((item) => (
             <ListRow key={item.id} item={item} density="comfortable" />
           ))}

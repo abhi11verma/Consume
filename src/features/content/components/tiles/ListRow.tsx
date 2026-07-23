@@ -49,9 +49,12 @@ export function ListRow({ item, density = 'compact' }: ListRowProps) {
         role="article"
         aria-label={`Open ${item.title}`}
         className={cn(
-          'group flex items-center gap-3 cursor-pointer rounded-xl',
-          'hover:bg-[var(--color-surface)] transition-colors duration-150',
-          isComfortable ? 'px-2 py-2.5' : 'px-2 py-1.5',
+          'group flex items-center gap-3 cursor-pointer transition-colors duration-150',
+          // Mobile: standalone card
+          'rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] shadow-sm hover:bg-[var(--color-surface)]',
+          // Desktop: flat table row inside a bordered container
+          'md:rounded-none md:border-0 md:border-b md:border-[var(--color-border)] md:bg-transparent md:shadow-none md:hover:bg-[var(--color-surface)] md:last:border-b-0',
+          isComfortable ? 'px-3 py-3' : 'px-3 py-2.5',
         )}
       >
         {/* Thumbnail */}
