@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { Home, ShieldCheck, LogOut, Settings2 } from 'lucide-react'
 import { NavItem } from './NavItem'
 import { useCategoryStore } from '@/features/content/store/categoryStore'
@@ -31,14 +32,15 @@ export function Sidebar() {
       }`}
     >
       {/* Logo */}
-      <div className={`mb-8 ${collapsed ? 'flex items-center justify-center' : 'px-3 flex items-center gap-2.5'}`}>
+      <Link
+        to="/"
+        className={`mb-8 ${collapsed ? 'flex items-center justify-center' : 'px-3 flex items-center gap-2.5'}`}
+      >
         <img src="/icon.svg" alt="Consume" className="h-7 w-7 flex-shrink-0" />
         {!collapsed && (
-          <div>
-            <h1 className="text-lg font-bold tracking-tight text-[var(--color-foreground)]">Consume</h1>
-          </div>
+          <h1 className="text-lg font-bold tracking-tight text-[var(--color-foreground)]">Consume</h1>
         )}
-      </div>
+      </Link>
 
       {/* Nav */}
       <nav className="flex flex-col gap-1">
