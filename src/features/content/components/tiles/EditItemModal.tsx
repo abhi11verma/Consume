@@ -175,8 +175,8 @@ export function EditItemModal({ item, onClose }: EditItemModalProps) {
               onClick={() => { if (!stagedFile) fileInputRef.current?.click() }}
             >
               {previewSrc ? (
-                <div className="relative">
-                  <img src={previewSrc} alt="Thumbnail preview" className="w-full object-contain max-h-52" />
+                <div className="relative min-h-36">
+                  <img src={previewSrc} alt="Thumbnail preview" className="w-full object-contain min-h-36 max-h-52" />
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
