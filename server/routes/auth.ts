@@ -40,7 +40,7 @@ router.post('/login', async (c) => {
     sameSite: 'Lax',
     path: '/',
     maxAge: 60 * 60 * 24 * 30,
-    secure: process.env.NODE_ENV === 'production',
+    secure: process.env.COOKIE_SECURE === 'true',
   })
 
   return c.json({ id: user.id, email: user.email, role: user.role })

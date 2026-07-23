@@ -15,6 +15,7 @@ services:
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-changeme}
       NODE_ENV: production
       IMAGES_DIR: /data/images
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
     volumes:
       - type: bind
         source: ./data/images
