@@ -51,9 +51,11 @@ router.post('/logout', (c) => {
   return c.json({ ok: true })
 })
 
-router.get('/me', requireAuth, (c) => {
-  const auth = c.get('auth')
-  return c.json(auth)
+router.get('/me', requireAuth, async (c) => {
+  const { userId, role } = c.get('auth')
+  const [user] = await sql`SELECT email FROM users WHERE id = ${userId}`
+  if (!user) return c.json({ error: 'User not found' }, 404)
+  return c.json({ userId, email: user.email as string, role })
 })
 
 export default router

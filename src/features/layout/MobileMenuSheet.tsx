@@ -67,7 +67,7 @@ export function MobileMenuSheet({ isOpen, onClose }: MobileMenuSheetProps) {
               <div className="flex items-center gap-3 px-1 py-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)]">
                 <div className="h-8 w-8 rounded-full bg-[var(--color-accent)]/20 flex items-center justify-center flex-shrink-0">
                   <span className="text-sm font-bold text-[var(--color-accent)]">
-                    {user.email[0].toUpperCase()}
+                    {user.email?.[0]?.toUpperCase() ?? '?'}
                   </span>
                 </div>
                 <div className="min-w-0 flex-1">

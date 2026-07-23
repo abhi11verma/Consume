@@ -87,7 +87,7 @@ export function Sidebar() {
           <div className="px-3 py-2 flex items-center gap-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)]">
             <div className="h-7 w-7 rounded-full bg-[var(--color-accent)]/20 flex items-center justify-center flex-shrink-0">
               <span className="text-xs font-bold text-[var(--color-accent)]">
-                {user.email[0].toUpperCase()}
+                {user.email?.[0]?.toUpperCase() ?? '?'}
               </span>
             </div>
             <span className="text-xs text-[var(--color-foreground)] truncate flex-1" title={user.email}>

@@ -32,7 +32,7 @@ export function SettingsScreen() {
           <div className="flex items-center gap-3 px-4 py-3">
             <div className="h-9 w-9 rounded-full bg-[var(--color-accent)]/20 flex items-center justify-center flex-shrink-0">
               <span className="text-sm font-bold text-[var(--color-accent)]">
-                {user.email[0].toUpperCase()}
+                {user.email?.[0]?.toUpperCase() ?? '?'}
               </span>
             </div>
             <div className="min-w-0">
