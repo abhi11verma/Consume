@@ -85,8 +85,9 @@ x-casaos:
     en_US: Your personal digital library
   description:
     en_US: |
-      Capture and organize links — videos, books, articles, podcasts, and news.
+      Capture and organize links — videos, books, articles, and podcasts.
       Self-hosted, private, and fast. Multi-user with admin controls.
+  icon: https://raw.githubusercontent.com/abhi11verma/Consume/main/public/icon.svg
   category: Productivity
   port_map: "${WEBUI_PORT:-3000}"
   version: "1.0.0"
