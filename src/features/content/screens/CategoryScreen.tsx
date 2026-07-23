@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion'
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, LayoutGrid, LayoutList } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
 import { useContentStore } from '../store/contentStore'
 import { TileGrid } from '../components/grid/TileGrid'
+import { ListRow } from '../components/tiles/ListRow'
+import { useViewMode } from '../hooks/useViewMode'
 import { CONTENT_TYPE_META } from '../constants'
 import type { ContentType } from '../types'
 
@@ -17,6 +19,7 @@ export function CategoryScreen({ type }: CategoryScreenProps) {
   )
   const meta = CONTENT_TYPE_META[type]
   const navigate = useNavigate()
+  const [viewMode, toggleViewMode] = useViewMode(`category:${type}`)
 
   return (
     <motion.div
@@ -35,12 +38,12 @@ export function CategoryScreen({ type }: CategoryScreenProps) {
           <ChevronLeft size={22} />
         </button>
         <div
-          className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-2xl"
+          className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-2xl flex-shrink-0"
           style={{ backgroundColor: `${meta.accentColor}20` }}
         >
           <meta.icon size={20} style={{ color: meta.accentColor }} />
         </div>
-        <div>
+        <div className="flex-1 min-w-0">
           <h1 className="text-xl md:text-2xl font-bold text-[var(--color-foreground)]">
             {meta.pluralLabel}
           </h1>
@@ -48,12 +51,29 @@ export function CategoryScreen({ type }: CategoryScreenProps) {
             {items.length} {items.length === 1 ? 'item' : 'items'} captured
           </p>
         </div>
+
+        {/* View toggle */}
+        {items.length > 0 && (
+          <button
+            onClick={toggleViewMode}
+            className="flex items-center justify-center h-8 w-8 rounded-xl bg-[var(--color-surface)] text-[var(--color-muted-fg)] hover:text-[var(--color-foreground)] transition-colors cursor-pointer flex-shrink-0"
+            aria-label={viewMode === 'grid' ? 'Switch to list view' : 'Switch to grid view'}
+          >
+            {viewMode === 'grid' ? <LayoutList size={16} /> : <LayoutGrid size={16} />}
+          </button>
+        )}
       </div>
 
       {items.length === 0 ? (
         <EmptyCategory label={meta.pluralLabel} />
-      ) : (
+      ) : viewMode === 'grid' ? (
         <TileGrid items={items} type={type} />
+      ) : (
+        <div className="-mx-2">
+          {items.map((item) => (
+            <ListRow key={item.id} item={item} density="compact" />
+          ))}
+        </div>
       )}
     </motion.div>
   )
