@@ -97,12 +97,15 @@ function parseOGFromHTML(html: string): Partial<FetchedMetadata> | null {
     getMeta(/<title[^>]*>([^<]+)<\/title>/i) ??
     null
 
-  const thumbnail =
+  const isSvg = (url: string | null) => url?.match(/\.svg(\?|$)/i) !== null
+  const rawThumbnail =
     getMeta(/property=["']og:image["'][^>]*content=["']([^"']+)["']/i) ??
     getMeta(/content=["']([^"']+)["'][^>]*property=["']og:image["']/i) ??
     getMeta(/name=["']twitter:image["'][^>]*content=["']([^"']+)["']/i) ??
     getMeta(/content=["']([^"']+)["'][^>]*name=["']twitter:image["']/i) ??
     null
+  // SVG og:images are almost always site logos, not content thumbnails — skip them
+  const thumbnail = isSvg(rawThumbnail) ? null : rawThumbnail
 
   const description =
     getMeta(/property=["']og:description["'][^>]*content=["']([^"']+)["']/i) ??
