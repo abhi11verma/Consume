@@ -3,7 +3,7 @@ name: consume
 services:
   api:
     container_name: consume-api
-    build: .
+    image: ghcr.io/abhi11verma/consume:latest
     ports:
       - target: 3000
         published: "${WEBUI_PORT:-3000}"
