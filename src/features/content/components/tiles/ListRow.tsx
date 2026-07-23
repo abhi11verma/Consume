@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Pencil, Trash2 } from 'lucide-react'
 import type { ConsumeItem } from '../../types'
-import { CONTENT_TYPE_META } from '../../constants'
+import { useCategoryBySlug } from '../../store/categoryStore'
+import { resolveIcon } from '../../categoryIcons'
 import { GeneratedThumbnail } from './GeneratedThumbnail'
 import { EditItemModal } from './EditItemModal'
 import { useDisplayThumbnail } from '../../hooks/useDisplayThumbnail'
@@ -14,7 +15,8 @@ interface ListRowProps {
 }
 
 export function ListRow({ item, density = 'compact' }: ListRowProps) {
-  const meta = CONTENT_TYPE_META[item.type]
+  const category = useCategoryBySlug(item.type)
+  const Icon = resolveIcon(category.iconName)
   const [imgError, setImgError] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
   const displayThumbnail = useDisplayThumbnail(item)
@@ -65,8 +67,8 @@ export function ListRow({ item, density = 'compact' }: ListRowProps) {
             <GeneratedThumbnail
               title={item.title}
               domain={item.domain}
-              accentColor={meta.accentColor}
-              Icon={meta.icon}
+              accentColor={category.accentColor}
+              Icon={Icon}
               variant="landscape"
             />
           ) : (

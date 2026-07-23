@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion'
 import { useContentStore } from '../store/contentStore'
+import { useCategoryStore } from '../store/categoryStore'
 import { CategorySection } from '../components/rows/CategorySection'
-import { NewsLayout } from '../components/NewsLayout'
-import { CONTENT_TYPE_ORDER } from '../constants'
 
 export function HomeScreen() {
   const items = useContentStore((s) => s.items)
+  const categories = useCategoryStore((s) => s.categories)
   const hasAny = items.length > 0
 
   return (
@@ -19,15 +19,10 @@ export function HomeScreen() {
         <EmptyDashboard />
       ) : (
         <>
-          {CONTENT_TYPE_ORDER.map((type) => {
-            const typeItems = items.filter((i) => i.type === type)
+          {categories.map((cat) => {
+            const typeItems = items.filter((i) => i.type === cat.slug)
             if (typeItems.length === 0) return null
-
-            if (type === 'news') {
-              return <NewsLayout key={type} items={typeItems} />
-            }
-
-            return <CategorySection key={type} type={type} items={typeItems} />
+            return <CategorySection key={cat.slug} category={cat} items={typeItems} />
           })}
         </>
       )}

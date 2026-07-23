@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { AppShell } from '@/features/layout/AppShell'
 import { HomeScreen } from '@/features/content/screens/HomeScreen'
 import { CategoryScreen } from '@/features/content/screens/CategoryScreen'
@@ -17,11 +17,15 @@ export function AppRouter() {
       <Route element={<AuthGuard />}>
         <Route element={<AppShell />}>
           <Route path="/" element={<HomeScreen />} />
-          <Route path="/videos" element={<CategoryScreen type="video" />} />
-          <Route path="/books" element={<CategoryScreen type="book" />} />
-          <Route path="/articles" element={<CategoryScreen type="article" />} />
-          <Route path="/podcasts" element={<CategoryScreen type="podcast" />} />
-          <Route path="/news" element={<CategoryScreen type="news" />} />
+          <Route path="/c/:slug" element={<CategoryScreen />} />
+
+          {/* Legacy redirects for old hard-coded routes */}
+          <Route path="/videos" element={<Navigate to="/c/video" replace />} />
+          <Route path="/books" element={<Navigate to="/c/book" replace />} />
+          <Route path="/articles" element={<Navigate to="/c/article" replace />} />
+          <Route path="/podcasts" element={<Navigate to="/c/podcast" replace />} />
+          <Route path="/news" element={<Navigate to="/c/news" replace />} />
+
           <Route path="/share-target" element={<ShareTargetScreen />} />
           <Route path="/settings" element={<SettingsScreen />} />
 

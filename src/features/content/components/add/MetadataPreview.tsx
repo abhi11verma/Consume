@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
 import type { FetchedMetadata, ContentType } from '../../types'
-import { CONTENT_TYPE_META } from '../../constants'
+import { useCategoryBySlug } from '../../store/categoryStore'
+import { resolveIcon } from '../../categoryIcons'
 
 interface MetadataPreviewProps {
   metadata: FetchedMetadata
@@ -20,7 +21,8 @@ export function MetadataPreview({
   overrideThumbnail,
   onClearThumbnail,
 }: MetadataPreviewProps) {
-  const meta = CONTENT_TYPE_META[type]
+  const category = useCategoryBySlug(type)
+  const Icon = resolveIcon(category.iconName)
   const [imgError, setImgError] = useState(false)
   const displayThumb = overrideThumbnail !== undefined
     ? overrideThumbnail
@@ -43,9 +45,9 @@ export function MetadataPreview({
         ) : (
           <div
             className="w-full h-full flex items-center justify-center"
-            style={{ background: `linear-gradient(135deg, ${meta.accentColor}30, ${meta.accentColor}10)` }}
+            style={{ background: `linear-gradient(135deg, ${category.accentColor}30, ${category.accentColor}10)` }}
           >
-            <meta.icon size={24} style={{ color: meta.accentColor, opacity: 0.6 }} />
+            <Icon size={24} style={{ color: category.accentColor, opacity: 0.6 }} />
           </div>
         )}
         {displayThumb && onClearThumbnail && (

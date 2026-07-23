@@ -1,8 +1,8 @@
 import type { ConsumeItem } from '../../types'
+import { useCategoryBySlug } from '../../store/categoryStore'
 import { PortraitTile } from './PortraitTile'
 import { LandscapeTile } from './LandscapeTile'
 import { FeaturedTile } from './FeaturedTile'
-import { CONTENT_TYPE_META } from '../../constants'
 
 interface ContentTileProps {
   item: ConsumeItem
@@ -11,13 +11,13 @@ interface ContentTileProps {
 }
 
 export function ContentTile({ item, featured = false, className }: ContentTileProps) {
-  const { tileVariant } = CONTENT_TYPE_META[item.type]
+  const category = useCategoryBySlug(item.type)
 
   if (featured) {
     return <FeaturedTile item={item} className={className} />
   }
 
-  if (tileVariant === 'portrait') {
+  if (category.tileVariant === 'portrait') {
     return <PortraitTile item={item} className={className} />
   }
 

@@ -1,25 +1,24 @@
 import { motion } from 'framer-motion'
 import { ChevronLeft, LayoutGrid, LayoutList } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
 import { useContentStore } from '../store/contentStore'
+import { useCategoryBySlug, FALLBACK_CATEGORY } from '../store/categoryStore'
+import { resolveIcon } from '../categoryIcons'
 import { TileGrid } from '../components/grid/TileGrid'
 import { ListRow } from '../components/tiles/ListRow'
 import { useViewMode } from '../hooks/useViewMode'
-import { CONTENT_TYPE_META } from '../constants'
-import type { ContentType } from '../types'
 
-interface CategoryScreenProps {
-  type: ContentType
-}
-
-export function CategoryScreen({ type }: CategoryScreenProps) {
+export function CategoryScreen() {
+  const { slug = '' } = useParams<{ slug: string }>()
   const items = useContentStore(
-    useShallow((s) => s.items.filter((i) => i.type === type)),
+    useShallow((s) => s.items.filter((i) => i.type === slug)),
   )
-  const meta = CONTENT_TYPE_META[type]
+  const category = useCategoryBySlug(slug)
   const navigate = useNavigate()
-  const [viewMode, toggleViewMode] = useViewMode(`category:${type}`)
+  const [viewMode, toggleViewMode] = useViewMode(`category:${slug}`)
+
+  const Icon = resolveIcon(category.iconName)
 
   return (
     <motion.div
@@ -39,13 +38,13 @@ export function CategoryScreen({ type }: CategoryScreenProps) {
         </button>
         <div
           className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-2xl flex-shrink-0"
-          style={{ backgroundColor: `${meta.accentColor}20` }}
+          style={{ backgroundColor: `${category.accentColor}20` }}
         >
-          <meta.icon size={20} style={{ color: meta.accentColor }} />
+          <Icon size={20} style={{ color: category.accentColor }} />
         </div>
         <div className="flex-1 min-w-0">
           <h1 className="text-xl md:text-2xl font-bold text-[var(--color-foreground)]">
-            {meta.pluralLabel}
+            {category.pluralLabel}
           </h1>
           <p className="text-xs md:text-sm text-[var(--color-muted)]">
             {items.length} {items.length === 1 ? 'item' : 'items'} captured
@@ -65,9 +64,9 @@ export function CategoryScreen({ type }: CategoryScreenProps) {
       </div>
 
       {items.length === 0 ? (
-        <EmptyCategory label={meta.pluralLabel} />
+        <EmptyCategory label={category === FALLBACK_CATEGORY ? slug : category.pluralLabel} />
       ) : viewMode === 'grid' ? (
-        <TileGrid items={items} type={type} />
+        <TileGrid items={items} tileVariant={category.tileVariant} />
       ) : (
         <div className="rounded-2xl border border-[var(--color-border)] overflow-hidden">
           {items.map((item) => (

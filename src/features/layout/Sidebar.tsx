@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Home, ShieldCheck, LogOut, Settings2 } from 'lucide-react'
 import { NavItem } from './NavItem'
-import { CONTENT_TYPE_META, CONTENT_TYPE_ORDER } from '@/features/content/constants'
+import { useCategoryStore } from '@/features/content/store/categoryStore'
+import { resolveIcon } from '@/features/content/categoryIcons'
 import { useContentStore } from '@/features/content/store/contentStore'
 import { useAuth } from '@/features/auth/useAuth'
 
 export function Sidebar() {
   const items = useContentStore((s) => s.items)
+  const categories = useCategoryStore((s) => s.categories)
   const { user, logout } = useAuth()
 
   // Collapsed (icon-only) on md, full on lg+
@@ -48,16 +50,16 @@ export function Sidebar() {
           count={items.length}
           collapsed={collapsed}
         />
-        {CONTENT_TYPE_ORDER.map((type) => {
-          const meta = CONTENT_TYPE_META[type]
+        {categories.map((cat) => {
+          const Icon = resolveIcon(cat.iconName)
           return (
             <NavItem
-              key={type}
-              to={meta.path}
-              label={meta.pluralLabel}
-              icon={meta.icon}
-              accentColor={meta.accentColor}
-              count={countByType(type)}
+              key={cat.slug}
+              to={`/c/${cat.slug}`}
+              label={cat.pluralLabel}
+              icon={Icon}
+              accentColor={cat.accentColor}
+              count={countByType(cat.slug)}
               collapsed={collapsed}
             />
           )

@@ -1,17 +1,13 @@
 import { motion } from 'framer-motion'
 import { ContentTile } from '../tiles/ContentTile'
 import type { ConsumeItem } from '../../types'
-import { CONTENT_TYPE_META } from '../../constants'
-import type { ContentType } from '../../types'
 
 interface TileGridProps {
   items: ConsumeItem[]
-  type: ContentType
+  tileVariant: 'landscape' | 'portrait'
 }
 
-export function TileGrid({ items, type }: TileGridProps) {
-  const { tileVariant } = CONTENT_TYPE_META[type]
-
+export function TileGrid({ items, tileVariant }: TileGridProps) {
   const colClass =
     tileVariant === 'portrait'
       ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-[repeat(auto-fill,minmax(150px,1fr))]'

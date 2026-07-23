@@ -1,8 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { FileText, Mic2, Newspaper, ShieldCheck, LogOut, Settings2 } from 'lucide-react'
+import { ShieldCheck, LogOut, Settings2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { LucideIcon } from 'lucide-react'
 import { useAuth } from '@/features/auth/useAuth'
+import { useCategoryStore } from '@/features/content/store/categoryStore'
+import { resolveIcon } from '@/features/content/categoryIcons'
 
 interface MobileMenuSheetProps {
   isOpen: boolean
@@ -11,6 +13,7 @@ interface MobileMenuSheetProps {
 
 export function MobileMenuSheet({ isOpen, onClose }: MobileMenuSheetProps) {
   const { user, logout } = useAuth()
+  const categories = useCategoryStore((s) => s.categories)
 
   const handleLogout = async () => {
     onClose()
@@ -46,9 +49,19 @@ export function MobileMenuSheet({ isOpen, onClose }: MobileMenuSheetProps) {
 
             {/* Nav items */}
             <div className="flex flex-col gap-1 mb-4">
-              <SheetNavItem to="/articles" icon={FileText} label="Articles" accentColor="#3b82f6" onClose={onClose} />
-              <SheetNavItem to="/podcasts" icon={Mic2} label="Podcasts" accentColor="#8b5cf6" onClose={onClose} />
-              <SheetNavItem to="/news" icon={Newspaper} label="News" accentColor="#f59e0b" onClose={onClose} />
+              {categories.map((cat) => {
+                const Icon = resolveIcon(cat.iconName)
+                return (
+                  <SheetNavItem
+                    key={cat.slug}
+                    to={`/c/${cat.slug}`}
+                    icon={Icon}
+                    label={cat.pluralLabel}
+                    accentColor={cat.accentColor}
+                    onClose={onClose}
+                  />
+                )
+              })}
               <SheetNavItem to="/settings" icon={Settings2} label="Settings" accentColor="var(--color-accent)" onClose={onClose} />
               {user?.role === 'admin' && (
                 <SheetNavItem to="/admin" icon={ShieldCheck} label="Admin" accentColor="var(--color-accent)" onClose={onClose} />

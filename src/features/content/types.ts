@@ -1,8 +1,8 @@
-export type ContentType = 'video' | 'book' | 'article' | 'podcast' | 'news'
+export type ContentType = string
 
 export interface ConsumeItem {
   id: string
-  type: ContentType
+  type: string
   url: string
   title: string
   thumbnail: string | null
@@ -18,7 +18,7 @@ export interface FetchedMetadata {
   thumbnail: string | null
   description: string | null
   author: string | null
-  detectedType: ContentType
+  detectedType: string
 }
 
 export type FetchState =

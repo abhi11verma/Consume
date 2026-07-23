@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ExternalLink, Pencil } from 'lucide-react'
 import type { ConsumeItem } from '../../types'
-import { CONTENT_TYPE_META } from '../../constants'
+import { useCategoryBySlug } from '../../store/categoryStore'
+import { resolveIcon } from '../../categoryIcons'
 import { cn } from '@/lib/utils'
 import { TileDeleteButton } from './TileDeleteButton'
 import { GeneratedThumbnail } from './GeneratedThumbnail'
@@ -15,7 +16,8 @@ interface LandscapeTileProps {
 }
 
 export function LandscapeTile({ item, className }: LandscapeTileProps) {
-  const meta = CONTENT_TYPE_META[item.type]
+  const category = useCategoryBySlug(item.type)
+  const Icon = resolveIcon(category.iconName)
   const [imgError, setImgError] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
   const displayThumbnail = useDisplayThumbnail(item)
@@ -62,8 +64,8 @@ export function LandscapeTile({ item, className }: LandscapeTileProps) {
             <GeneratedThumbnail
               title={item.title}
               domain={item.domain}
-              accentColor={meta.accentColor}
-              Icon={meta.icon}
+              accentColor={category.accentColor}
+              Icon={Icon}
               variant="landscape"
             />
           )}

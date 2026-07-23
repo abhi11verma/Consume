@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { X, ImagePlus, Trash2 } from 'lucide-react'
 import { useContentStore } from '../../store/contentStore'
-import { CONTENT_TYPE_ORDER, CONTENT_TYPE_META } from '../../constants'
+import { useCategoryStore } from '../../store/categoryStore'
 import type { ConsumeItem, ContentType } from '../../types'
 import { api } from '@/lib/api'
 
@@ -20,6 +20,7 @@ const labelTextCls = 'text-xs font-medium text-[var(--color-muted)]'
 
 export function EditItemModal({ item, onClose }: EditItemModalProps) {
   const updateItem = useContentStore((s) => s.updateItem)
+  const categories = useCategoryStore((s) => s.categories)
 
   const [title, setTitle] = useState(item.title)
   const [author, setAuthor] = useState(item.author ?? '')
@@ -128,9 +129,9 @@ export function EditItemModal({ item, onClose }: EditItemModalProps) {
           <label className={labelCls}>
             <span className={labelTextCls}>Type</span>
             <select className={inputCls} value={type} onChange={(e) => setType(e.target.value as ContentType)}>
-              {CONTENT_TYPE_ORDER.map((t) => (
-                <option key={t} value={t}>
-                  {CONTENT_TYPE_META[t].label}
+              {categories.map((cat) => (
+                <option key={cat.slug} value={cat.slug}>
+                  {cat.label}
                 </option>
               ))}
             </select>

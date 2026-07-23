@@ -2,7 +2,8 @@ import { motion } from 'framer-motion'
 import { formatDistanceToNow } from 'date-fns'
 import { ExternalLink } from 'lucide-react'
 import type { ConsumeItem } from '../../types'
-import { CONTENT_TYPE_META } from '../../constants'
+import { useCategoryBySlug } from '../../store/categoryStore'
+import { resolveIcon } from '../../categoryIcons'
 import { cn } from '@/lib/utils'
 import { TileDeleteButton } from './TileDeleteButton'
 
@@ -12,7 +13,8 @@ interface FeaturedTileProps {
 }
 
 export function FeaturedTile({ item, className }: FeaturedTileProps) {
-  const meta = CONTENT_TYPE_META[item.type]
+  const category = useCategoryBySlug(item.type)
+  const Icon = resolveIcon(category.iconName)
 
   const handleClick = () => {
     window.open(item.url, '_blank', 'noopener,noreferrer')
@@ -49,7 +51,7 @@ export function FeaturedTile({ item, className }: FeaturedTileProps) {
       <div
         className="absolute inset-0"
         style={{
-          background: `linear-gradient(135deg, ${meta.accentColor}60, ${meta.accentColor}20)`,
+          background: `linear-gradient(135deg, ${category.accentColor}60, ${category.accentColor}20)`,
         }}
       />
 
@@ -68,10 +70,10 @@ export function FeaturedTile({ item, className }: FeaturedTileProps) {
       <div className="absolute inset-x-0 bottom-0 p-5">
         <span
           className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-semibold mb-3"
-          style={{ backgroundColor: meta.accentColor, color: '#fff' }}
+          style={{ backgroundColor: category.accentColor, color: '#fff' }}
         >
-          <meta.icon size={11} />
-          {meta.label}
+          <Icon size={11} />
+          {category.label}
         </span>
         <h3 className="text-lg font-bold text-white leading-snug line-clamp-3 mb-2">
           {item.title}
