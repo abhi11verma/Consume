@@ -9,12 +9,21 @@ Built for [CasaOS](https://casaos.zimaspace.com/) but runs anywhere Docker runs.
 ## Features
 
 - Add links by URL — metadata (title, thumbnail, description, author) is fetched server-side
-- Organize by type: Videos, Books, Articles, Podcasts, News
+- Organize by type: Videos, Books, Articles, Podcasts — and create custom categories
 - Upload or paste custom thumbnails
 - Export and import your library as JSON
 - Multi-user with **admin** and **user** roles
 - Admin panel: create users, purge items, manage roles
 - Dark mode
+
+---
+
+## Upcoming
+
+- **Tagging** — add `#tags` to any item; filter your library by one or more tags
+- **Search** — find items by title, tag, or category; full-text search across your library
+- **Global search** — `⌘K` command palette to jump anywhere from any screen
+- **Archive** — move items out of the active library without deleting them; browse or restore later
 
 ---
 

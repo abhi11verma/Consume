@@ -107,20 +107,20 @@ export function ListRow({ item, density = 'compact' }: ListRowProps) {
         </div>
 
         {/* Inline hover actions */}
-        <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-shrink-0">
-          <button
-            onClick={handleEditClick}
-            aria-label="Edit"
-            className="p-1.5 rounded-lg text-[var(--color-muted-fg)] hover:text-[var(--color-foreground)] hover:bg-[var(--color-card)] transition-colors cursor-pointer"
-          >
-            <Pencil size={13} />
-          </button>
+        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-shrink-0">
           <button
             onClick={handleDelete}
             aria-label="Remove"
-            className="p-1.5 rounded-lg text-[var(--color-muted-fg)] hover:text-red-500 hover:bg-[var(--color-card)] transition-colors cursor-pointer"
+            className="p-2 rounded-lg text-[var(--color-muted-fg)] hover:text-red-500 hover:bg-[var(--color-card)] transition-colors cursor-pointer"
           >
-            <Trash2 size={13} />
+            <Trash2 size={15} />
+          </button>
+          <button
+            onClick={handleEditClick}
+            aria-label="Edit"
+            className="p-2 rounded-lg text-[var(--color-muted-fg)] hover:text-[var(--color-foreground)] hover:bg-[var(--color-card)] transition-colors cursor-pointer"
+          >
+            <Pencil size={15} />
           </button>
         </div>
       </div>

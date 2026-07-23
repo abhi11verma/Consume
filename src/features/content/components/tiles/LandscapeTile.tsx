@@ -98,7 +98,7 @@ export function LandscapeTile({ item, className }: LandscapeTileProps) {
         <button
           onClick={handleEditClick}
           aria-label="Edit item"
-          className="absolute top-2 left-2 h-7 w-7 rounded-full bg-black/50 text-white
+          className="absolute top-2 right-2 h-7 w-7 rounded-full bg-black/50 text-white
             flex items-center justify-center opacity-0 group-hover:opacity-100
             transition-opacity duration-150 hover:bg-white/20 cursor-pointer z-10"
         >
