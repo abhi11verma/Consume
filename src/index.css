@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #f7f6f3;
+  --color-surface: #f7f6f3;
+  --color-card: #ffffff;
+  --color-card-hover: #fafaf8;
+  --color-border: #ebebeb;
+  --color-foreground: #1a1917;
+  --color-muted: #6b6560;
+  --color-muted-fg: #9c9690;
+  --color-accent: #6366f1;
+  --color-accent-fg: #ffffff;
+
+  --color-cat-video: #ef4444;
+  --color-cat-book: #0d9488;
+  --color-cat-article: #3b82f6;
+  --color-cat-podcast: #8b5cf6;
+  --color-cat-news: #f59e0b;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --radius: 1rem;
+}
+
+@variant dark (&:where(.dark, .dark *));
+
+html.dark {
+  --color-background: #141413;
+  --color-surface: #141413;
+  --color-card: #1f1e1c;
+  --color-card-hover: #252420;
+  --color-border: #262523;
+  --color-foreground: #f0ede8;
+  --color-muted: #78756e;
+  --color-muted-fg: #a09c95;
+  --color-accent: #818cf8;
+  --color-accent-fg: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  letter-spacing: -0.012em;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
