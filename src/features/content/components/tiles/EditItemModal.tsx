@@ -104,10 +104,10 @@ export function EditItemModal({ item, onClose }: EditItemModalProps) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center sm:p-4"
       onClick={handleBackdrop}
     >
-      <div className="bg-[var(--color-card)] rounded-2xl w-full max-w-md shadow-2xl border border-[var(--color-border)] max-h-[90vh] flex flex-col">
+      <div className="bg-[var(--color-card)] rounded-t-2xl sm:rounded-2xl w-full sm:max-w-md shadow-2xl border border-[var(--color-border)] max-h-[85dvh] flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--color-border)] flex-shrink-0">
           <h2 className="text-sm font-semibold text-[var(--color-foreground)]">Edit item</h2>
