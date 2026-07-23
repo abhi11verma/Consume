@@ -3,7 +3,6 @@ import { FileText, Mic2, Newspaper, ShieldCheck, LogOut, Settings2 } from 'lucid
 import { Link } from 'react-router-dom'
 import type { LucideIcon } from 'lucide-react'
 import { useAuth } from '@/features/auth/useAuth'
-import { ThemeToggle } from '@/features/theme/ThemeToggle'
 
 interface MobileMenuSheetProps {
   isOpen: boolean
@@ -57,11 +56,6 @@ export function MobileMenuSheet({ isOpen, onClose }: MobileMenuSheetProps) {
             </div>
 
             <div className="h-px bg-[var(--color-border)] mb-3" />
-
-            {/* Theme + user */}
-            <div className="flex items-center justify-between px-1 mb-3">
-              <ThemeToggle />
-            </div>
 
             {user && (
               <div className="flex items-center gap-3 px-1 py-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)]">
