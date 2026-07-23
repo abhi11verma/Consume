@@ -104,10 +104,13 @@ export function EditItemModal({ item, onClose }: EditItemModalProps) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center sm:p-4"
+      className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center sm:items-center sm:p-4"
       onClick={handleBackdrop}
     >
-      <div className="bg-[var(--color-card)] rounded-t-2xl sm:rounded-2xl w-full sm:max-w-md shadow-2xl border border-[var(--color-border)] max-h-[85dvh] flex flex-col">
+      <div
+        className="bg-[var(--color-card)] rounded-t-2xl sm:rounded-2xl w-full sm:max-w-md shadow-2xl border border-[var(--color-border)] flex flex-col overflow-hidden"
+        style={{ maxHeight: 'min(85vh, 85dvh)' }}
+      >
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--color-border)] flex-shrink-0">
           <h2 className="text-sm font-semibold text-[var(--color-foreground)]">Edit item</h2>
@@ -120,7 +123,7 @@ export function EditItemModal({ item, onClose }: EditItemModalProps) {
         </div>
 
         {/* Fields — scrollable */}
-        <div className="px-5 py-4 flex flex-col gap-4 overflow-y-auto flex-1 min-h-0">
+        <div className="px-5 py-4 flex flex-col gap-4 overflow-y-auto flex-1 min-h-0 overscroll-contain">
           <label className={labelCls}>
             <span className={labelTextCls}>Title</span>
             <input className={inputCls} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
