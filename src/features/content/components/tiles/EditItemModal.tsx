@@ -120,7 +120,7 @@ export function EditItemModal({ item, onClose }: EditItemModalProps) {
         </div>
 
         {/* Fields — scrollable */}
-        <div className="px-5 py-4 flex flex-col gap-4 overflow-y-auto">
+        <div className="px-5 py-4 flex flex-col gap-4 overflow-y-auto flex-1 min-h-0">
           <label className={labelCls}>
             <span className={labelTextCls}>Title</span>
             <input className={inputCls} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
