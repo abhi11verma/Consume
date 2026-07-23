@@ -26,14 +26,12 @@ export async function seedAdminUser() {
   const password = process.env.ADMIN_PASSWORD
   if (!email || !password) return
 
-  const [existing] = await sql`SELECT id FROM users WHERE role = 'admin' LIMIT 1`
-  if (existing) return
-
+  // Always upsert so that changing ADMIN_PASSWORD and restarting takes effect
   const hash = await bcrypt.hash(password, 12)
   await sql`
     INSERT INTO users (email, password_hash, role)
     VALUES (${email}, ${hash}, 'admin')
-    ON CONFLICT (email) DO NOTHING
+    ON CONFLICT (email) DO UPDATE SET password_hash = EXCLUDED.password_hash, role = 'admin'
   `
-  console.log(`Admin user seeded: ${email}`)
+  console.log(`Admin user synced: ${email}`)
 }
