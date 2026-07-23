@@ -7,6 +7,14 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-07-23
+
+### Fixed
+- Edit item modal is now scrollable on mobile — fields no longer hidden behind the keyboard
+- Edit item modal is properly centered on desktop (regression from mobile bottom-sheet change)
+- Thumbnail upload zone no longer collapses when a blank or transparent image is set
+- SVG `og:image` values (usually site logos) are now ignored during metadata fetch; the generated tile thumbnail is shown instead
+
 ## [1.1.0] - 2026-07-23
 
 ### Added
@@ -47,7 +55,8 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - CasaOS-compatible docker-compose (multi-container: app + PostgreSQL)
 - Published to GHCR (`ghcr.io/abhi11verma/consume`)
 
-[Unreleased]: https://github.com/abhi11verma/Consume/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/abhi11verma/Consume/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/abhi11verma/Consume/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/abhi11verma/Consume/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/abhi11verma/Consume/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/abhi11verma/Consume/releases/tag/v1.0.0
