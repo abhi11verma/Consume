@@ -176,21 +176,21 @@ export function EditItemModal({ item, onClose }: EditItemModalProps) {
             >
               {previewSrc ? (
                 <div className="relative">
-                  <img src={previewSrc} alt="Thumbnail preview" className="w-full object-contain max-h-36" />
+                  <img src={previewSrc} alt="Thumbnail preview" className="w-full object-contain max-h-52" />
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
                       handleClearImage()
                       setThumbnailUrl('')
                     }}
-                    className="absolute top-2 right-2 h-6 w-6 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-red-500 transition cursor-pointer"
+                    className="absolute top-2 right-2 h-7 w-7 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-red-500 transition cursor-pointer"
                   >
-                    <Trash2 size={11} />
+                    <Trash2 size={13} />
                   </button>
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center h-24 gap-1.5 text-[var(--color-muted-fg)]">
-                  <ImagePlus size={18} />
+                <div className="flex flex-col items-center justify-center h-36 gap-2 text-[var(--color-muted-fg)]">
+                  <ImagePlus size={22} />
                   <span className="text-xs">Click to upload · or focus here and paste</span>
                 </div>
               )}
