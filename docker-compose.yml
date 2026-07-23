@@ -90,7 +90,7 @@ x-casaos:
   icon: https://raw.githubusercontent.com/abhi11verma/Consume/main/public/icon.svg
   category: Productivity
   port_map: "${WEBUI_PORT:-3000}"
-  version: "1.0.0"
+  version: "1.1.0"
   tips:
     before_install:
       en_US: |
