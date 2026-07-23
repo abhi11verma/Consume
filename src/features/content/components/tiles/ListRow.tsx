@@ -50,7 +50,7 @@ export function ListRow({ item, density = 'compact' }: ListRowProps) {
         aria-label={`Open ${item.title}`}
         className={cn(
           'group flex items-center gap-3 cursor-pointer transition-colors duration-150',
-          'border-b border-[var(--color-border)] last:border-b-0 hover:bg-[var(--color-surface)]',
+          'bg-[var(--color-card)] border-b border-[var(--color-border)] last:border-b-0 hover:bg-[var(--color-surface)]',
           isComfortable ? 'px-3 py-3' : 'px-3 py-2.5',
         )}
       >
