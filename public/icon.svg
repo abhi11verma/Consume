@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Bookmark shape -->
+  <path fill="#863bff" d="M128 44h256q28 0 28 28v332l-156 76-156-76V72q0-28 28-28z"/>
+  <!-- Content lines — white, varying widths for natural text feel -->
+  <rect fill="#fff" fill-opacity=".92" x="155" y="148" width="202" height="20" rx="10"/>
+  <rect fill="#fff" fill-opacity=".92" x="155" y="192" width="148" height="20" rx="10"/>
+  <rect fill="#fff" fill-opacity=".92" x="155" y="236" width="172" height="20" rx="10"/>
+</svg>

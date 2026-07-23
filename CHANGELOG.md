@@ -7,6 +7,12 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+### Added
+- Responsive mobile and tablet layout — collapsing icon-only sidebar on tablet, bottom navigation bar on mobile
+- PWA support — installable on Android as a home screen app, service worker for offline capability
+- Share to Consume — app appears in Android share sheet; shared URLs open directly in the add dialog
+- Custom bookmark icon themed around content capture
+
 ## [1.0.1] - 2026-07-23
 
 ### Fixed

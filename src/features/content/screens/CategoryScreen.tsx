@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion'
+import { ChevronLeft } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
 import { useContentStore } from '../store/contentStore'
 import { TileGrid } from '../components/grid/TileGrid'
@@ -14,27 +16,35 @@ export function CategoryScreen({ type }: CategoryScreenProps) {
     useShallow((s) => s.items.filter((i) => i.type === type)),
   )
   const meta = CONTENT_TYPE_META[type]
+  const navigate = useNavigate()
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.25 }}
-      className="px-8 py-8"
+      className="px-4 py-4 md:px-8 md:py-8"
     >
       {/* Page header */}
-      <div className="flex items-center gap-4 mb-8">
+      <div className="flex items-center gap-3 mb-4 md:mb-8">
+        <button
+          onClick={() => navigate(-1)}
+          className="md:hidden flex items-center justify-center h-9 w-9 -ml-1 rounded-full hover:bg-[var(--color-surface)] transition-colors text-[var(--color-muted-fg)]"
+          aria-label="Go back"
+        >
+          <ChevronLeft size={22} />
+        </button>
         <div
-          className="flex h-12 w-12 items-center justify-center rounded-2xl"
+          className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-2xl"
           style={{ backgroundColor: `${meta.accentColor}20` }}
         >
-          <meta.icon size={22} style={{ color: meta.accentColor }} />
+          <meta.icon size={20} style={{ color: meta.accentColor }} />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-[var(--color-foreground)]">
+          <h1 className="text-xl md:text-2xl font-bold text-[var(--color-foreground)]">
             {meta.pluralLabel}
           </h1>
-          <p className="text-sm text-[var(--color-muted)]">
+          <p className="text-xs md:text-sm text-[var(--color-muted)]">
             {items.length} {items.length === 1 ? 'item' : 'items'} captured
           </p>
         </div>

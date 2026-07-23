@@ -10,8 +10,8 @@ interface TileRowProps {
 }
 
 const TILE_WIDTH = {
-  landscape: 'w-64 flex-shrink-0',
-  portrait: 'w-40 flex-shrink-0',
+  landscape: 'w-44 md:w-64 flex-shrink-0',
+  portrait: 'w-28 md:w-40 flex-shrink-0',
 }
 
 export function TileRow({ items, tileVariant }: TileRowProps) {
@@ -58,7 +58,7 @@ export function TileRow({ items, tileVariant }: TileRowProps) {
       <div
         ref={scrollRef}
         onScroll={onScroll}
-        className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth py-1 px-0.5"
+        className="flex gap-3 md:gap-4 overflow-x-auto scrollbar-hide scroll-smooth py-1 px-0.5"
         style={{ scrollSnapType: 'x mandatory' }}
       >
         {items.map((item) => (

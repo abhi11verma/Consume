@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Solid background for Android adaptive icon — safe zone is inner 80% -->
+  <rect width="512" height="512" fill="#863bff"/>
+  <!-- White bookmark, scaled to fit well within safe zone -->
+  <path fill="white" fill-opacity=".97" d="M160 60h192q24 0 24 24v306l-120 66-120-66V84q0-24 24-24z"/>
+  <!-- Content lines in purple on white bookmark -->
+  <rect fill="#863bff" fill-opacity=".75" x="184" y="138" width="160" height="15" rx="7"/>
+  <rect fill="#863bff" fill-opacity=".75" x="184" y="174" width="116" height="15" rx="7"/>
+  <rect fill="#863bff" fill-opacity=".75" x="184" y="210" width="136" height="15" rx="7"/>
+</svg>

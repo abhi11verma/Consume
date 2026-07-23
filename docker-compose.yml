@@ -49,6 +49,8 @@ services:
   db:
     container_name: consume-db
     image: postgres:16-alpine
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_USER: consume
       POSTGRES_PASSWORD: consume

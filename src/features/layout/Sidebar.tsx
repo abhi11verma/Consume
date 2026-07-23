@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Home, ShieldCheck, LogOut } from 'lucide-react'
 import { NavItem } from './NavItem'
 import { ThemeToggle } from '@/features/theme/ThemeToggle'
@@ -10,16 +11,37 @@ export function Sidebar() {
   const items = useContentStore((s) => s.items)
   const { user, logout } = useAuth()
 
+  // Collapsed (icon-only) on md, full on lg+
+  const [collapsed, setCollapsed] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia('(max-width: 1023px)').matches : false,
+  )
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 1023px)')
+    const handler = (e: MediaQueryListEvent) => setCollapsed(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
   const countByType = (type: string) => items.filter((i) => i.type === type).length
 
   return (
-    <aside className="flex flex-col h-full w-60 flex-shrink-0 px-4 py-6 border-r border-[var(--color-border)]">
+    <aside
+      className={`hidden md:flex flex-col h-full flex-shrink-0 border-r border-[var(--color-border)] transition-[width] duration-200 overflow-hidden ${
+        collapsed ? 'w-14 px-2 py-6' : 'w-60 px-4 py-6'
+      }`}
+    >
       {/* Logo */}
-      <div className="mb-8 px-3">
-        <h1 className="text-xl font-bold tracking-tight text-[var(--color-foreground)]">
-          Consume
-        </h1>
-        <p className="text-xs text-[var(--color-muted-fg)] mt-0.5">Your digital library</p>
+      <div className={`mb-8 ${collapsed ? 'flex items-center justify-center' : 'px-3'}`}>
+        {collapsed ? (
+          <span className="text-lg font-black text-[var(--color-accent)]">C</span>
+        ) : (
+          <>
+            <h1 className="text-xl font-bold tracking-tight text-[var(--color-foreground)]">
+              Consume
+            </h1>
+            <p className="text-xs text-[var(--color-muted-fg)] mt-0.5">Your digital library</p>
+          </>
+        )}
       </div>
 
       {/* Nav */}
@@ -30,6 +52,7 @@ export function Sidebar() {
           icon={Home}
           accentColor="var(--color-accent)"
           count={items.length}
+          collapsed={collapsed}
         />
         {CONTENT_TYPE_ORDER.map((type) => {
           const meta = CONTENT_TYPE_META[type]
@@ -41,6 +64,7 @@ export function Sidebar() {
               icon={meta.icon}
               accentColor={meta.accentColor}
               count={countByType(type)}
+              collapsed={collapsed}
             />
           )
         })}
@@ -50,17 +74,18 @@ export function Sidebar() {
             label="Admin"
             icon={ShieldCheck}
             accentColor="var(--color-accent)"
+            collapsed={collapsed}
           />
         )}
       </nav>
 
-      {/* Data export/import + theme toggle + user info pinned to bottom */}
+      {/* Bottom: data actions + theme + user */}
       <div className="mt-auto flex flex-col gap-3">
-        <DataActions />
-        <div className="px-1">
+        {!collapsed && <DataActions />}
+        <div className={collapsed ? 'flex justify-center' : 'px-1'}>
           <ThemeToggle />
         </div>
-        {user && (
+        {user && !collapsed && (
           <div className="px-1 flex items-center justify-between">
             <span className="text-xs text-[var(--color-muted-fg)] truncate max-w-[150px]" title={user.email}>
               {user.email}
@@ -68,7 +93,7 @@ export function Sidebar() {
             <button
               onClick={() => void logout()}
               title="Sign out"
-              className="p-1.5 rounded-md text-[var(--color-muted-fg)] hover:text-[var(--color-foreground)] transition-colors"
+              className="p-1.5 rounded-md text-[var(--color-muted-fg)] hover:text-[var(--color-foreground)] transition-colors cursor-pointer"
             >
               <LogOut size={14} />
             </button>

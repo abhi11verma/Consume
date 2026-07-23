@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { AppShell } from '@/features/layout/AppShell'
 import { HomeScreen } from '@/features/content/screens/HomeScreen'
 import { CategoryScreen } from '@/features/content/screens/CategoryScreen'
+import { ShareTargetScreen } from '@/features/content/screens/ShareTargetScreen'
 import { LoginScreen } from '@/features/auth/LoginScreen'
 import { AuthGuard } from '@/features/auth/AuthGuard'
 import { AdminGuard } from '@/features/auth/AdminGuard'
@@ -20,6 +21,7 @@ export function AppRouter() {
           <Route path="/articles" element={<CategoryScreen type="article" />} />
           <Route path="/podcasts" element={<CategoryScreen type="podcast" />} />
           <Route path="/news" element={<CategoryScreen type="news" />} />
+          <Route path="/share-target" element={<ShareTargetScreen />} />
 
           <Route element={<AdminGuard />}>
             <Route path="/admin" element={<AdminScreen />} />

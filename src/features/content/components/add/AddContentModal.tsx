@@ -13,9 +13,10 @@ import { cn } from '@/lib/utils'
 interface AddContentModalProps {
   isOpen: boolean
   onClose: () => void
+  initialUrl?: string
 }
 
-export function AddContentModal({ isOpen, onClose }: AddContentModalProps) {
+export function AddContentModal({ isOpen, onClose, initialUrl }: AddContentModalProps) {
   const [url, setUrl] = useState('')
   const [urlError, setUrlError] = useState('')
   const [editedTitle, setEditedTitle] = useState('')
@@ -47,7 +48,12 @@ export function AddContentModal({ isOpen, onClose }: AddContentModalProps) {
 
   useEffect(() => {
     if (isOpen) {
-      setTimeout(() => urlInputRef.current?.focus(), 100)
+      if (initialUrl) {
+        setUrl(initialUrl)
+        setTimeout(() => fetch(initialUrl), 150)
+      } else {
+        setTimeout(() => urlInputRef.current?.focus(), 100)
+      }
     } else {
       setUrl('')
       setUrlError('')
@@ -176,8 +182,9 @@ export function AddContentModal({ isOpen, onClose }: AddContentModalProps) {
             exit={{ opacity: 0, scale: 0.95, y: 8 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
             className={cn(
-              'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50',
-              'w-full max-w-lg rounded-2xl p-6',
+              'fixed z-50 top-1/2 -translate-y-1/2',
+              'left-4 right-4 md:left-1/2 md:right-auto md:-translate-x-1/2 md:w-full md:max-w-lg',
+              'rounded-2xl p-4 md:p-6',
               'bg-[var(--color-surface)] border border-[var(--color-border)]',
               'shadow-2xl',
             )}

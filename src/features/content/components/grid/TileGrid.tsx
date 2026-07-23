@@ -14,11 +14,11 @@ export function TileGrid({ items, type }: TileGridProps) {
 
   const colClass =
     tileVariant === 'portrait'
-      ? 'grid-cols-[repeat(auto-fill,minmax(150px,1fr))]'
-      : 'grid-cols-[repeat(auto-fill,minmax(260px,1fr))]'
+      ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-[repeat(auto-fill,minmax(150px,1fr))]'
+      : 'grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(260px,1fr))]'
 
   return (
-    <div className={`grid ${colClass} gap-5`}>
+    <div className={`grid ${colClass} gap-3 md:gap-5`}>
       {items.map((item, i) => (
         <motion.div
           key={item.id}

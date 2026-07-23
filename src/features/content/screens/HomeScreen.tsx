@@ -13,7 +13,7 @@ export function HomeScreen() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.25 }}
-      className="px-8 py-8"
+      className="px-4 py-4 md:px-8 md:py-8"
     >
       {!hasAny ? (
         <EmptyDashboard />

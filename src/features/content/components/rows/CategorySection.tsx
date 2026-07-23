@@ -16,7 +16,7 @@ export function CategorySection({ type, items, limit = 8 }: CategorySectionProps
   if (items.length === 0) return null
 
   return (
-    <section className="mb-10">
+    <section className="mb-6 md:mb-10">
       {/* Header */}
       <div className="flex items-center gap-2 mb-4">
         <Link
