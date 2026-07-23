@@ -85,11 +85,7 @@ export function DataActions() {
   }
 
   return (
-    <div className="flex flex-col gap-1.5 px-2">
-      <p className="text-[10px] font-medium text-[var(--color-muted)] px-1 mb-0.5 uppercase tracking-wide">
-        Data
-      </p>
-
+    <div className="flex flex-col gap-1.5 px-2 py-1">
       <ActionButton
         icon={exportFeedback.status === 'loading' ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
         label={exportFeedback.status === 'success' ? (exportFeedback.message ?? 'Exported') : 'Export'}

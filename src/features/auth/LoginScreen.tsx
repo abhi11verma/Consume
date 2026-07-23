@@ -27,7 +27,10 @@ export function LoginScreen() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--color-background)]">
       <div className="w-full max-w-sm px-8 py-10 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]">
-        <h1 className="text-2xl font-bold text-[var(--color-foreground)] mb-1">Consume</h1>
+        <div className="flex items-center gap-3 mb-1">
+          <img src="/icon.svg" alt="Consume" className="h-8 w-8" />
+          <h1 className="text-2xl font-bold text-[var(--color-foreground)]">Consume</h1>
+        </div>
         <p className="text-sm text-[var(--color-muted-fg)] mb-8">Sign in to your library</p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">

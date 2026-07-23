@@ -7,6 +7,7 @@ import { LoginScreen } from '@/features/auth/LoginScreen'
 import { AuthGuard } from '@/features/auth/AuthGuard'
 import { AdminGuard } from '@/features/auth/AdminGuard'
 import { AdminScreen } from '@/features/admin/AdminScreen'
+import { SettingsScreen } from '@/features/settings/SettingsScreen'
 
 export function AppRouter() {
   return (
@@ -22,6 +23,7 @@ export function AppRouter() {
           <Route path="/podcasts" element={<CategoryScreen type="podcast" />} />
           <Route path="/news" element={<CategoryScreen type="news" />} />
           <Route path="/share-target" element={<ShareTargetScreen />} />
+          <Route path="/settings" element={<SettingsScreen />} />
 
           <Route element={<AdminGuard />}>
             <Route path="/admin" element={<AdminScreen />} />

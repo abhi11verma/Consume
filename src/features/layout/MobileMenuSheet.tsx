@@ -1,9 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { FileText, Mic2, Newspaper, ShieldCheck, LogOut } from 'lucide-react'
+import { FileText, Mic2, Newspaper, ShieldCheck, LogOut, Settings2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { LucideIcon } from 'lucide-react'
 import { useAuth } from '@/features/auth/useAuth'
-import { DataActions } from '@/features/content/components/DataActions'
 import { ThemeToggle } from '@/features/theme/ThemeToggle'
 
 interface MobileMenuSheetProps {
@@ -41,41 +40,48 @@ export function MobileMenuSheet({ isOpen, onClose }: MobileMenuSheetProps) {
             className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl bg-[var(--color-surface)] border-t border-[var(--color-border)] px-4 pt-3"
             style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 1rem)' }}
           >
+            {/* Handle */}
             <div className="flex justify-center mb-4">
               <div className="h-1 w-10 rounded-full bg-[var(--color-border)]" />
             </div>
 
+            {/* Nav items */}
             <div className="flex flex-col gap-1 mb-4">
               <SheetNavItem to="/articles" icon={FileText} label="Articles" accentColor="#3b82f6" onClose={onClose} />
               <SheetNavItem to="/podcasts" icon={Mic2} label="Podcasts" accentColor="#8b5cf6" onClose={onClose} />
               <SheetNavItem to="/news" icon={Newspaper} label="News" accentColor="#f59e0b" onClose={onClose} />
+              <SheetNavItem to="/settings" icon={Settings2} label="Settings" accentColor="var(--color-accent)" onClose={onClose} />
               {user?.role === 'admin' && (
                 <SheetNavItem to="/admin" icon={ShieldCheck} label="Admin" accentColor="var(--color-accent)" onClose={onClose} />
               )}
             </div>
 
             <div className="h-px bg-[var(--color-border)] mb-3" />
-            <div className="mb-2">
-              <DataActions />
-            </div>
-            <div className="mb-1 px-1">
+
+            {/* Theme + user */}
+            <div className="flex items-center justify-between px-1 mb-3">
               <ThemeToggle />
             </div>
 
             {user && (
-              <>
-                <div className="h-px bg-[var(--color-border)] my-3" />
-                <div className="flex items-center justify-between px-1 pb-1">
-                  <span className="text-sm text-[var(--color-muted-fg)] truncate max-w-[200px]">{user.email}</span>
-                  <button
-                    onClick={() => void handleLogout()}
-                    className="flex items-center gap-1.5 text-sm text-[var(--color-muted)] hover:text-red-500 transition-colors cursor-pointer"
-                  >
-                    <LogOut size={14} />
-                    Sign out
-                  </button>
+              <div className="flex items-center gap-3 px-1 py-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)]">
+                <div className="h-8 w-8 rounded-full bg-[var(--color-accent)]/20 flex items-center justify-center flex-shrink-0">
+                  <span className="text-sm font-bold text-[var(--color-accent)]">
+                    {user.email[0].toUpperCase()}
+                  </span>
                 </div>
-              </>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-[var(--color-foreground)] truncate">{user.email}</p>
+                  <p className="text-xs text-[var(--color-muted-fg)] capitalize">{user.role}</p>
+                </div>
+                <button
+                  onClick={() => void handleLogout()}
+                  className="p-1.5 rounded-md text-[var(--color-muted-fg)] hover:text-red-500 transition-colors cursor-pointer flex-shrink-0"
+                  title="Sign out"
+                >
+                  <LogOut size={15} />
+                </button>
+              </div>
             )}
           </motion.div>
         </>
