@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { ContentTile } from '../tiles/ContentTile'
 import type { ConsumeItem } from '../../types'
@@ -17,7 +17,20 @@ const TILE_WIDTH = {
 export function TileRow({ items, tileVariant }: TileRowProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [showLeft, setShowLeft] = useState(false)
-  const [showRight, setShowRight] = useState(items.length > 4)
+  const [showRight, setShowRight] = useState(false)
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    const update = () => {
+      setShowLeft(el.scrollLeft > 8)
+      setShowRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 8)
+    }
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [items])
 
   const scroll = (dir: 'left' | 'right') => {
     const el = scrollRef.current
