@@ -6,9 +6,12 @@ import { useCategoryBySlug } from '../../store/categoryStore'
 import { resolveIcon } from '../../categoryIcons'
 import { cn } from '@/lib/utils'
 import { TileDeleteButton } from './TileDeleteButton'
+import { TileActionSheet } from './TileActionSheet'
 import { GeneratedThumbnail } from './GeneratedThumbnail'
 import { EditItemModal } from './EditItemModal'
 import { useDisplayThumbnail } from '../../hooks/useDisplayThumbnail'
+import { useContentStore } from '../../store/contentStore'
+import { useLongPress } from '@/hooks/useLongPress'
 
 interface LandscapeTileProps {
   item: ConsumeItem
@@ -20,7 +23,9 @@ export function LandscapeTile({ item, className }: LandscapeTileProps) {
   const Icon = resolveIcon(category.iconName)
   const [imgError, setImgError] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
+  const [sheetOpen, setSheetOpen] = useState(false)
   const displayThumbnail = useDisplayThumbnail(item)
+  const removeItem = useContentStore((s) => s.removeItem)
 
   useEffect(() => { setImgError(false) }, [displayThumbnail])
 
@@ -35,12 +40,15 @@ export function LandscapeTile({ item, className }: LandscapeTileProps) {
     setEditOpen(true)
   }
 
+  const longPress = useLongPress({ onLongPress: () => setSheetOpen(true) })
+
   return (
     <>
       <motion.div
         whileHover={{ y: -4, scale: 1.02 }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
         onClick={handleClick}
+        {...longPress}
         className={cn(
           'relative group rounded-2xl overflow-hidden cursor-pointer',
           'bg-[var(--color-card)] border border-[var(--color-border)]',
@@ -109,6 +117,14 @@ export function LandscapeTile({ item, className }: LandscapeTileProps) {
       </motion.div>
 
       {editOpen && <EditItemModal item={item} onClose={() => setEditOpen(false)} />}
+      {sheetOpen && (
+        <TileActionSheet
+          title={item.title}
+          onEdit={() => setEditOpen(true)}
+          onDelete={() => removeItem(item.id)}
+          onClose={() => setSheetOpen(false)}
+        />
+      )}
     </>
   )
 }

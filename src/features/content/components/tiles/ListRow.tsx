@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
-import { Pencil, Trash2 } from 'lucide-react'
+import { Pencil, Trash2, MoreVertical } from 'lucide-react'
 import type { ConsumeItem } from '../../types'
 import { useCategoryBySlug } from '../../store/categoryStore'
 import { resolveIcon } from '../../categoryIcons'
 import { GeneratedThumbnail } from './GeneratedThumbnail'
 import { EditItemModal } from './EditItemModal'
+import { TileActionSheet } from './TileActionSheet'
 import { useDisplayThumbnail } from '../../hooks/useDisplayThumbnail'
 import { useContentStore } from '../../store/contentStore'
 import { cn } from '@/lib/utils'
@@ -19,6 +20,7 @@ export function ListRow({ item, density = 'compact' }: ListRowProps) {
   const Icon = resolveIcon(category.iconName)
   const [imgError, setImgError] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
+  const [sheetOpen, setSheetOpen] = useState(false)
   const displayThumbnail = useDisplayThumbnail(item)
   const removeItem = useContentStore((s) => s.removeItem)
 
@@ -106,8 +108,8 @@ export function ListRow({ item, density = 'compact' }: ListRowProps) {
           </div>
         </div>
 
-        {/* Inline hover actions */}
-        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-shrink-0">
+        {/* Desktop: hover actions */}
+        <div className="hidden md:flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-shrink-0">
           <button
             onClick={handleDelete}
             aria-label="Remove"
@@ -123,9 +125,26 @@ export function ListRow({ item, density = 'compact' }: ListRowProps) {
             <Pencil size={15} />
           </button>
         </div>
+
+        {/* Mobile: always-visible ⋯ button */}
+        <button
+          onClick={(e) => { e.stopPropagation(); setSheetOpen(true) }}
+          aria-label="More actions"
+          className="md:hidden p-2 rounded-lg text-[var(--color-muted-fg)] flex-shrink-0 cursor-pointer"
+        >
+          <MoreVertical size={16} />
+        </button>
       </div>
 
       {editOpen && <EditItemModal item={item} onClose={() => setEditOpen(false)} />}
+      {sheetOpen && (
+        <TileActionSheet
+          title={item.title}
+          onEdit={() => setEditOpen(true)}
+          onDelete={() => removeItem(item.id)}
+          onClose={() => setSheetOpen(false)}
+        />
+      )}
     </>
   )
 }
