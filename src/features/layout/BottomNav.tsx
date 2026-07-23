@@ -18,7 +18,7 @@ export function BottomNav() {
       >
         <div className="flex h-16 items-stretch">
           <BottomNavItem to="/" icon={Home} label="Home" />
-          <BottomNavItem to="/videos" icon={Video} label="Videos" />
+          <BottomNavItem to="/c/video" icon={Video} label="Videos" />
 
           {/* Center add button */}
           <button
@@ -30,7 +30,7 @@ export function BottomNav() {
             </div>
           </button>
 
-          <BottomNavItem to="/books" icon={BookOpen} label="Books" />
+          <BottomNavItem to="/c/book" icon={BookOpen} label="Books" />
 
           {/* More → opens sheet */}
           <button

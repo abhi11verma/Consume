@@ -75,6 +75,7 @@ router.put('/:id', async (c) => {
   const { id } = c.req.param()
   const body = await c.req.json<Partial<{
     title: string
+    type: string
     thumbnail: string | null
     description: string | null
     author: string | null
@@ -84,6 +85,7 @@ router.put('/:id', async (c) => {
   const [row] = await sql`
     UPDATE items SET
       title       = COALESCE(${body.title ?? null}, title),
+      type        = COALESCE(${body.type ?? null}, type),
       thumbnail   = CASE WHEN ${Object.hasOwn(body, 'thumbnail')} THEN ${body.thumbnail ?? null} ELSE thumbnail END,
       description = CASE WHEN ${Object.hasOwn(body, 'description')} THEN ${body.description ?? null} ELSE description END,
       author      = CASE WHEN ${Object.hasOwn(body, 'author')} THEN ${body.author ?? null} ELSE author END,

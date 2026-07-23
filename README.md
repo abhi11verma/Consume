@@ -4,6 +4,12 @@ A self-hosted personal digital library. Capture and organize links — videos, b
 
 Built for [CasaOS](https://casaos.zimaspace.com/) but runs anywhere Docker runs.
 
+<p align="center">
+  <img src="docs/screenshot-desktop.png" alt="Desktop view" width="620" />
+  &nbsp;&nbsp;
+  <img src="docs/screenshot-mobile.jpg" alt="Mobile view" width="180" />
+</p>
+
 ---
 
 ## Features
