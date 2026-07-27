@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { ShieldCheck, LogOut, Settings2 } from 'lucide-react'
+import { ShieldCheck, LogOut, Settings2, LayoutList } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { LucideIcon } from 'lucide-react'
 import { useAuth } from '@/features/auth/useAuth'
@@ -49,6 +49,7 @@ export function MobileMenuSheet({ isOpen, onClose }: MobileMenuSheetProps) {
 
             {/* Nav items */}
             <div className="flex flex-col gap-1 mb-4">
+              <SheetNavItem to="/all" icon={LayoutList} label="All" accentColor="var(--color-accent)" onClose={onClose} />
               {categories.map((cat) => {
                 const Icon = resolveIcon(cat.iconName)
                 return (

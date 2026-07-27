@@ -23,3 +23,18 @@ CREATE TABLE IF NOT EXISTS items (
 
 CREATE INDEX IF NOT EXISTS idx_items_user_id ON items(user_id);
 CREATE INDEX IF NOT EXISTS idx_items_type    ON items(type);
+
+CREATE TABLE IF NOT EXISTS categories (
+  slug         TEXT NOT NULL,
+  user_id      UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  label        TEXT NOT NULL,
+  plural_label TEXT NOT NULL,
+  icon_name    TEXT NOT NULL,
+  accent_color TEXT NOT NULL,
+  tile_variant TEXT NOT NULL DEFAULT 'landscape',
+  built_in     BOOLEAN NOT NULL DEFAULT false,
+  "order"      INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (slug, user_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_categories_user_id ON categories(user_id);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Home, ShieldCheck, LogOut, Settings2 } from 'lucide-react'
+import { Home, ShieldCheck, LogOut, Settings2, LayoutList } from 'lucide-react'
 import { NavItem } from './NavItem'
 import { useCategoryStore } from '@/features/content/store/categoryStore'
 import { resolveIcon } from '@/features/content/categoryIcons'
@@ -49,6 +49,14 @@ export function Sidebar() {
           to="/"
           label="Home"
           icon={Home}
+          accentColor="var(--color-accent)"
+          count={items.length}
+          collapsed={collapsed}
+        />
+        <NavItem
+          to="/all"
+          label="All"
+          icon={LayoutList}
           accentColor="var(--color-accent)"
           count={items.length}
           collapsed={collapsed}

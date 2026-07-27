@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 import { setCookie, deleteCookie } from 'hono/cookie'
 import { SignJWT } from 'jose'
 import bcrypt from 'bcryptjs'
-import { sql } from '../db/client.js'
+import { sql, seedDefaultCategories } from '../db/client.js'
 import { requireAuth } from '../middleware/auth.js'
 
 const router = new Hono()
@@ -33,6 +33,8 @@ router.post('/login', async (c) => {
 
   const valid = await bcrypt.compare(body.password, user.password_hash)
   if (!valid) return c.json({ error: 'Invalid credentials' }, 401)
+
+  await seedDefaultCategories(user.id as string)
 
   const token = await makeToken(user.id, user.role)
   setCookie(c, 'session', token, {

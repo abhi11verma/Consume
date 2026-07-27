@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { AppShell } from '@/features/layout/AppShell'
 import { HomeScreen } from '@/features/content/screens/HomeScreen'
+import { AllScreen } from '@/features/content/screens/AllScreen'
 import { CategoryScreen } from '@/features/content/screens/CategoryScreen'
 import { ShareTargetScreen } from '@/features/content/screens/ShareTargetScreen'
 import { LoginScreen } from '@/features/auth/LoginScreen'
@@ -17,6 +18,7 @@ export function AppRouter() {
       <Route element={<AuthGuard />}>
         <Route element={<AppShell />}>
           <Route path="/" element={<HomeScreen />} />
+          <Route path="/all" element={<AllScreen />} />
           <Route path="/c/:slug" element={<CategoryScreen />} />
 
           {/* Legacy redirects for old hard-coded routes */}

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { api } from '@/lib/api'
 
 export interface CategoryDef {
   slug: string
@@ -23,87 +23,53 @@ export const FALLBACK_CATEGORY: CategoryDef = {
   order: 999,
 }
 
-const DEFAULT_CATEGORIES: CategoryDef[] = [
-  {
-    slug: 'video',
-    label: 'Video',
-    pluralLabel: 'Videos',
-    iconName: 'Video',
-    accentColor: '#ef4444',
-    tileVariant: 'landscape',
-    builtIn: true,
-    order: 0,
-  },
-  {
-    slug: 'book',
-    label: 'Book',
-    pluralLabel: 'Books',
-    iconName: 'BookOpen',
-    accentColor: '#0d9488',
-    tileVariant: 'portrait',
-    builtIn: true,
-    order: 1,
-  },
-  {
-    slug: 'article',
-    label: 'Article',
-    pluralLabel: 'Articles',
-    iconName: 'FileText',
-    accentColor: '#3b82f6',
-    tileVariant: 'landscape',
-    builtIn: true,
-    order: 2,
-  },
-  {
-    slug: 'podcast',
-    label: 'Podcast',
-    pluralLabel: 'Podcasts',
-    iconName: 'Mic2',
-    accentColor: '#8b5cf6',
-    tileVariant: 'landscape',
-    builtIn: true,
-    order: 3,
-  },
-]
-
 interface CategoryStore {
   categories: CategoryDef[]
-  addCategory: (def: Omit<CategoryDef, 'builtIn' | 'order'>) => void
-  removeCategory: (slug: string) => void
+  isLoading: boolean
+  loadCategories: () => Promise<void>
+  addCategory: (def: Omit<CategoryDef, 'builtIn' | 'order'>) => Promise<void>
+  removeCategory: (slug: string) => Promise<void>
 }
 
-export const useCategoryStore = create<CategoryStore>()(
-  persist(
-    (set, get) => ({
-      categories: DEFAULT_CATEGORIES,
-      addCategory: (def) => {
-        const { categories } = get()
-        if (categories.some((c) => c.slug === def.slug)) return
-        set({
-          categories: [
-            ...categories,
-            { ...def, builtIn: false, order: categories.length },
-          ],
-        })
-      },
-      removeCategory: (slug) => {
-        set((s) => ({
-          categories: s.categories.filter((c) => c.builtIn || c.slug !== slug),
-        }))
-      },
-    }),
-    {
-      name: 'consume:categories',
-      version: 1,
-      migrate: (_persistedState, version) => {
-        if (version === 0) {
-          return { categories: DEFAULT_CATEGORIES }
-        }
-        return _persistedState as CategoryStore
-      },
-    },
-  ),
-)
+export const useCategoryStore = create<CategoryStore>((set, get) => ({
+  categories: [],
+  isLoading: false,
+
+  loadCategories: async () => {
+    set({ isLoading: true })
+    try {
+      const categories = await api.get<CategoryDef[]>('/api/categories')
+      set({ categories, isLoading: false })
+    } catch {
+      set({ isLoading: false })
+    }
+  },
+
+  addCategory: async (def) => {
+    const { categories } = get()
+    if (categories.some((c) => c.slug === def.slug)) return
+    const optimistic: CategoryDef = { ...def, builtIn: false, order: categories.length }
+    set({ categories: [...categories, optimistic] })
+    try {
+      const saved = await api.post<CategoryDef>('/api/categories', { ...optimistic })
+      set({ categories: [...get().categories.filter((c) => c.slug !== def.slug), saved] })
+    } catch {
+      set({ categories: get().categories.filter((c) => c.slug !== def.slug) })
+    }
+  },
+
+  removeCategory: async (slug) => {
+    const { categories } = get()
+    const removed = categories.find((c) => c.slug === slug)
+    if (!removed || removed.builtIn) return
+    set({ categories: categories.filter((c) => c.slug !== slug) })
+    try {
+      await api.delete(`/api/categories/${slug}`)
+    } catch {
+      set({ categories: [...get().categories, removed].sort((a, b) => a.order - b.order) })
+    }
+  },
+}))
 
 export function useCategoryBySlug(slug: string): CategoryDef {
   return useCategoryStore((s) => s.categories.find((c) => c.slug === slug) ?? FALLBACK_CATEGORY)

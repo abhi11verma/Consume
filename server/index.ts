@@ -9,6 +9,7 @@ import authRouter from './routes/auth.js'
 import itemsRouter from './routes/items.js'
 import metadataRouter from './routes/metadata.js'
 import adminRouter from './routes/admin.js'
+import categoriesRouter from './routes/categories.js'
 
 const app = new Hono()
 
@@ -46,6 +47,7 @@ app.get('/images/:filename', (c) => {
 // API routes
 app.route('/api/auth', authRouter)
 app.route('/api/items', itemsRouter)
+app.route('/api/categories', categoriesRouter)
 app.route('/api/metadata', metadataRouter)
 app.route('/api/admin', adminRouter)
 
