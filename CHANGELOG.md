@@ -7,6 +7,11 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+## [1.2.3] - 2026-07-27
+
+### Fixed
+- Creating a new category no longer throws `crypto.randomUUID is not a function` when the app is accessed over plain HTTP
+
 ## [1.2.2] - 2026-07-27
 
 ### Fixed

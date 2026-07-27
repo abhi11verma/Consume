@@ -34,7 +34,7 @@ export function CategoryOverride({ value, onChange }: CategoryOverrideProps) {
   const handleCreate = () => {
     const name = newName.trim()
     if (!name) return
-    const slug = crypto.randomUUID().slice(0, 8)
+    const slug = (crypto.randomUUID?.() ?? Math.random().toString(36).slice(2, 10)).slice(0, 8)
     const label = name.charAt(0).toUpperCase() + name.slice(1)
     addCategory({
       slug,
