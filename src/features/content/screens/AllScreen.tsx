@@ -1,7 +1,7 @@
 import { formatDistanceToNow } from 'date-fns'
 import { ExternalLink } from 'lucide-react'
 import { useContentStore } from '../store/contentStore'
-import { useCategoryBySlug, useCategoryStore } from '../store/categoryStore'
+import { useCategoryBySlug } from '../store/categoryStore'
 import { resolveIcon } from '../categoryIcons'
 import type { ConsumeItem } from '../types'
 
