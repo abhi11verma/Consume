@@ -6,6 +6,7 @@ import { useCategoryStore } from '@/features/content/store/categoryStore'
 import { resolveIcon } from '@/features/content/categoryIcons'
 import { useContentStore } from '@/features/content/store/contentStore'
 import { useAuth } from '@/features/auth/useAuth'
+import { version } from '../../../package.json'
 
 export function Sidebar() {
   const items = useContentStore((s) => s.items)
@@ -115,6 +116,10 @@ export function Sidebar() {
           >
             <LogOut size={14} />
           </button>
+        )}
+
+        {!collapsed && (
+          <p className="px-3 text-[10px] text-[var(--color-muted-fg)]">v{version}</p>
         )}
       </div>
     </aside>
