@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { Download, Upload, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { useContentStore } from '../store/contentStore'
+import { useCategoryStore, type CategoryDef } from '../store/categoryStore'
 import { cn } from '@/lib/utils'
 import { api } from '@/lib/api'
 import type { ConsumeItem } from '../types'
@@ -25,6 +26,8 @@ function downloadJson(data: unknown, filename: string) {
 export function DataActions() {
   const items = useContentStore((s) => s.items)
   const loadItems = useContentStore((s) => s.loadItems)
+  const categories = useCategoryStore((s) => s.categories)
+  const loadCategories = useCategoryStore((s) => s.loadCategories)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [exportFeedback, setExportFeedback] = useState<Feedback>({ status: 'idle' })
   const [importFeedback, setImportFeedback] = useState<Feedback>({ status: 'idle' })
@@ -32,8 +35,12 @@ export function DataActions() {
   const handleExport = async () => {
     setExportFeedback({ status: 'loading' })
     try {
+      const customCategories = categories.filter((c) => !c.builtIn)
       const date = new Date().toISOString().split('T')[0]
-      downloadJson({ version: 1, exportedAt: new Date().toISOString(), items }, `consume-${date}.json`)
+      downloadJson(
+        { version: 2, exportedAt: new Date().toISOString(), categories: customCategories, items },
+        `consume-${date}.json`,
+      )
       setExportFeedback({ status: 'success', message: 'Exported' })
       setTimeout(() => setExportFeedback({ status: 'idle' }), 2500)
     } catch {
@@ -50,8 +57,22 @@ export function DataActions() {
     setImportFeedback({ status: 'loading' })
     try {
       const text = await file.text()
-      const parsed = JSON.parse(text) as { version?: number; items?: ConsumeItem[] }
+      const parsed = JSON.parse(text) as { version?: number; categories?: CategoryDef[]; items?: ConsumeItem[] }
       if (!Array.isArray(parsed.items)) throw new Error('Invalid export file')
+
+      // Create custom categories first so items resolve correctly
+      if (Array.isArray(parsed.categories)) {
+        const existingSlugs = new Set(categories.map((c) => c.slug))
+        for (const cat of parsed.categories) {
+          if (!cat.slug || existingSlugs.has(cat.slug)) continue
+          try {
+            await api.post('/api/categories', cat)
+          } catch {
+            // ignore 409 conflicts — category already exists
+          }
+        }
+        await loadCategories()
+      }
 
       let added = 0
       let skipped = 0

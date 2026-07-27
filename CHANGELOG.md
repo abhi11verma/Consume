@@ -7,6 +7,11 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-07-27
+
+### Fixed
+- Export now includes custom category definitions; import creates missing categories before inserting items so custom slugs no longer fall back to Uncategorised on a fresh instance
+
 ## [1.1.2] - 2026-07-23
 
 ### Fixed
