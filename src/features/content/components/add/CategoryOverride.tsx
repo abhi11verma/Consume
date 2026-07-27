@@ -17,17 +17,6 @@ const COLOR_PRESETS = [
   '#6b7280',
 ]
 
-function toSlug(name: string, existing: string[]): string {
-  const base = name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .substring(0, 30)
-  if (!existing.includes(base)) return base
-  let i = 2
-  while (existing.includes(`${base}-${i}`)) i++
-  return `${base}-${i}`
-}
 
 interface CategoryOverrideProps {
   value: string
@@ -45,8 +34,7 @@ export function CategoryOverride({ value, onChange }: CategoryOverrideProps) {
   const handleCreate = () => {
     const name = newName.trim()
     if (!name) return
-    const existingSlugs = categories.map((c) => c.slug)
-    const slug = toSlug(name, existingSlugs)
+    const slug = crypto.randomUUID().slice(0, 8)
     const label = name.charAt(0).toUpperCase() + name.slice(1)
     addCategory({
       slug,

@@ -1,12 +1,15 @@
 import { motion } from 'framer-motion'
 import { useContentStore } from '../store/contentStore'
-import { useCategoryStore } from '../store/categoryStore'
+import { useCategoryStore, FALLBACK_CATEGORY } from '../store/categoryStore'
 import { CategorySection } from '../components/rows/CategorySection'
 
 export function HomeScreen() {
   const items = useContentStore((s) => s.items)
   const categories = useCategoryStore((s) => s.categories)
   const hasAny = items.length > 0
+
+  const knownSlugs = new Set(categories.map((c) => c.slug))
+  const uncategorisedItems = items.filter((i) => !knownSlugs.has(i.type))
 
   return (
     <motion.div
@@ -24,6 +27,12 @@ export function HomeScreen() {
             if (typeItems.length === 0) return null
             return <CategorySection key={cat.slug} category={cat} items={typeItems} />
           })}
+          {uncategorisedItems.length > 0 && (
+            <CategorySection
+              category={{ ...FALLBACK_CATEGORY, slug: 'uncategorised', label: 'Uncategorised', pluralLabel: 'Uncategorised', iconName: 'HelpCircle', accentColor: '#6b7280' }}
+              items={uncategorisedItems}
+            />
+          )}
         </>
       )}
     </motion.div>

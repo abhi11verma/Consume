@@ -28,6 +28,31 @@ function snakeToCamel(row: Record<string, unknown>) {
 
 router.use('/*', requireAuth)
 
+router.delete('/bulk', async (c) => {
+  const { userId } = c.get('auth')
+  const body = await c.req.json<{ ids: string[] }>()
+  if (!Array.isArray(body.ids) || body.ids.length === 0) {
+    return c.json({ error: 'ids must be a non-empty array' }, 400)
+  }
+
+  const rows = await sql`
+    DELETE FROM items
+    WHERE id = ANY(${body.ids}::uuid[]) AND user_id = ${userId}
+    RETURNING thumbnail
+  `
+
+  // Clean up local image files
+  for (const row of rows) {
+    const thumb = row.thumbnail as string | null
+    if (thumb?.startsWith('/images/')) {
+      const filename = thumb.replace(/^\/images\//, '')
+      unlink(join(imagesDir(), filename)).catch(() => {})
+    }
+  }
+
+  return c.json({ deleted: rows.length })
+})
+
 router.get('/', async (c) => {
   const { userId } = c.get('auth')
   const rows = await sql`

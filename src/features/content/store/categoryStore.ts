@@ -28,6 +28,7 @@ interface CategoryStore {
   isLoading: boolean
   loadCategories: () => Promise<void>
   addCategory: (def: Omit<CategoryDef, 'builtIn' | 'order'>) => Promise<void>
+  updateCategory: (slug: string, updates: Partial<Omit<CategoryDef, 'slug' | 'builtIn' | 'order'>>) => Promise<void>
   removeCategory: (slug: string) => Promise<void>
 }
 
@@ -55,6 +56,15 @@ export const useCategoryStore = create<CategoryStore>((set, get) => ({
       set({ categories: [...get().categories.filter((c) => c.slug !== def.slug), saved] })
     } catch {
       set({ categories: get().categories.filter((c) => c.slug !== def.slug) })
+    }
+  },
+
+  updateCategory: async (slug, updates) => {
+    set({ categories: get().categories.map((c) => (c.slug === slug ? { ...c, ...updates } : c)) })
+    try {
+      await api.put(`/api/categories/${slug}`, updates)
+    } catch {
+      await get().loadCategories()
     }
   },
 

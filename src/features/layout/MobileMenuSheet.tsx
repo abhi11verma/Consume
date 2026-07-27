@@ -1,9 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { ShieldCheck, LogOut, Settings2, LayoutList } from 'lucide-react'
+import { ShieldCheck, LogOut, Settings2, LayoutList, HelpCircle } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { LucideIcon } from 'lucide-react'
 import { useAuth } from '@/features/auth/useAuth'
 import { useCategoryStore } from '@/features/content/store/categoryStore'
+import { useContentStore } from '@/features/content/store/contentStore'
 import { resolveIcon } from '@/features/content/categoryIcons'
 
 interface MobileMenuSheetProps {
@@ -14,6 +15,9 @@ interface MobileMenuSheetProps {
 export function MobileMenuSheet({ isOpen, onClose }: MobileMenuSheetProps) {
   const { user, logout } = useAuth()
   const categories = useCategoryStore((s) => s.categories)
+  const items = useContentStore((s) => s.items)
+  const knownSlugs = new Set(categories.map((c) => c.slug))
+  const uncategorisedCount = items.filter((i) => !knownSlugs.has(i.type)).length
 
   const handleLogout = async () => {
     onClose()
@@ -63,6 +67,9 @@ export function MobileMenuSheet({ isOpen, onClose }: MobileMenuSheetProps) {
                   />
                 )
               })}
+              {uncategorisedCount > 0 && (
+                <SheetNavItem to="/c/uncategorised" icon={HelpCircle} label="Uncategorised" accentColor="#6b7280" onClose={onClose} />
+              )}
               <SheetNavItem to="/settings" icon={Settings2} label="Settings" accentColor="var(--color-accent)" onClose={onClose} />
               {user?.role === 'admin' && (
                 <SheetNavItem to="/admin" icon={ShieldCheck} label="Admin" accentColor="var(--color-accent)" onClose={onClose} />

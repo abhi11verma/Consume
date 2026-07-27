@@ -1,19 +1,22 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Home, ShieldCheck, LogOut, Settings2, LayoutList } from 'lucide-react'
+import { Home, ShieldCheck, LogOut, Settings2, LayoutList, Pencil, Trash2, HelpCircle } from 'lucide-react'
 import { NavItem } from './NavItem'
 import { useCategoryStore } from '@/features/content/store/categoryStore'
+import type { CategoryDef } from '@/features/content/store/categoryStore'
 import { resolveIcon } from '@/features/content/categoryIcons'
 import { useContentStore } from '@/features/content/store/contentStore'
 import { useAuth } from '@/features/auth/useAuth'
+import { EditCategoryModal } from '@/features/ui/EditCategoryModal'
+import { ConfirmDialog } from '@/features/ui/ConfirmDialog'
 import { version } from '../../../package.json'
 
 export function Sidebar() {
   const items = useContentStore((s) => s.items)
   const categories = useCategoryStore((s) => s.categories)
+  const removeCategory = useCategoryStore((s) => s.removeCategory)
   const { user, logout } = useAuth()
 
-  // Collapsed (icon-only) on md, full on lg+
   const [collapsed, setCollapsed] = useState(() =>
     typeof window !== 'undefined' ? window.matchMedia('(max-width: 1023px)').matches : false,
   )
@@ -24,9 +27,15 @@ export function Sidebar() {
     return () => mq.removeEventListener('change', handler)
   }, [])
 
+  const [editingCat, setEditingCat] = useState<CategoryDef | null>(null)
+  const [deletingCat, setDeletingCat] = useState<CategoryDef | null>(null)
+
   const countByType = (type: string) => items.filter((i) => i.type === type).length
+  const knownSlugs = new Set(categories.map((c) => c.slug))
+  const uncategorisedCount = items.filter((i) => !knownSlugs.has(i.type)).length
 
   return (
+    <>
     <aside
       className={`hidden md:flex flex-col h-full flex-shrink-0 border-r border-[var(--color-border)] transition-[width] duration-200 overflow-hidden ${
         collapsed ? 'w-14 px-2 py-6' : 'w-60 px-4 py-6'
@@ -64,17 +73,50 @@ export function Sidebar() {
         {categories.map((cat) => {
           const Icon = resolveIcon(cat.iconName)
           return (
-            <NavItem
-              key={cat.slug}
-              to={`/c/${cat.slug}`}
-              label={cat.pluralLabel}
-              icon={Icon}
-              accentColor={cat.accentColor}
-              count={countByType(cat.slug)}
-              collapsed={collapsed}
-            />
+            <div key={cat.slug} className="relative group/cat">
+              <NavItem
+                to={`/c/${cat.slug}`}
+                label={cat.pluralLabel}
+                icon={Icon}
+                accentColor={cat.accentColor}
+                count={countByType(cat.slug)}
+                collapsed={collapsed}
+              />
+              {!collapsed && (
+                <div className="absolute right-1 top-1/2 -translate-y-1/2 hidden group-hover/cat:flex gap-0.5">
+                  <button
+                    onClick={(e) => { e.preventDefault(); setEditingCat(cat) }}
+                    className="flex h-6 w-6 items-center justify-center rounded-md text-[var(--color-muted-fg)] hover:text-[var(--color-foreground)] hover:bg-[var(--color-border)] transition cursor-pointer"
+                    title="Edit category"
+                  >
+                    <Pencil size={11} />
+                  </button>
+                  {!cat.builtIn && (
+                    <button
+                      onClick={(e) => { e.preventDefault(); setDeletingCat(cat) }}
+                      className="flex h-6 w-6 items-center justify-center rounded-md text-[var(--color-muted-fg)] hover:text-red-500 hover:bg-[var(--color-border)] transition cursor-pointer"
+                      title="Delete category"
+                    >
+                      <Trash2 size={11} />
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
           )
         })}
+
+        {uncategorisedCount > 0 && (
+          <NavItem
+            to="/c/uncategorised"
+            label="Uncategorised"
+            icon={HelpCircle}
+            accentColor="#6b7280"
+            count={uncategorisedCount}
+            collapsed={collapsed}
+          />
+        )}
+
         {user?.role === 'admin' && (
           <NavItem
             to="/admin"
@@ -131,5 +173,19 @@ export function Sidebar() {
         )}
       </div>
     </aside>
+
+    {editingCat && (
+      <EditCategoryModal category={editingCat} onClose={() => setEditingCat(null)} />
+    )}
+
+    {deletingCat && (
+      <ConfirmDialog
+        title={`Delete "${deletingCat.label}"`}
+        message={`All items in "${deletingCat.label}" will be moved to Uncategorised. This cannot be undone.`}
+        onConfirm={() => { void removeCategory(deletingCat.slug); setDeletingCat(null) }}
+        onCancel={() => setDeletingCat(null)}
+      />
+    )}
+    </>
   )
 }

@@ -3,7 +3,7 @@ import { ChevronLeft, LayoutGrid, LayoutList } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
 import { useContentStore } from '../store/contentStore'
-import { useCategoryBySlug, FALLBACK_CATEGORY } from '../store/categoryStore'
+import { useCategoryBySlug, useCategoryStore, FALLBACK_CATEGORY } from '../store/categoryStore'
 import { resolveIcon } from '../categoryIcons'
 import { TileGrid } from '../components/grid/TileGrid'
 import { ListRow } from '../components/tiles/ListRow'
@@ -11,10 +11,20 @@ import { useViewMode } from '../hooks/useViewMode'
 
 export function CategoryScreen() {
   const { slug = '' } = useParams<{ slug: string }>()
+  const isUncategorised = slug === 'uncategorised'
+  const categories = useCategoryStore((s) => s.categories)
+  const knownSlugs = new Set(categories.map((c) => c.slug))
   const items = useContentStore(
-    useShallow((s) => s.items.filter((i) => i.type === slug)),
+    useShallow((s) =>
+      isUncategorised
+        ? s.items.filter((i) => !knownSlugs.has(i.type))
+        : s.items.filter((i) => i.type === slug),
+    ),
   )
-  const category = useCategoryBySlug(slug)
+  const lookedUpCategory = useCategoryBySlug(slug)
+  const category = isUncategorised
+    ? { ...FALLBACK_CATEGORY, slug: 'uncategorised', label: 'Uncategorised', pluralLabel: 'Uncategorised', iconName: 'HelpCircle', accentColor: '#6b7280' }
+    : lookedUpCategory
   const navigate = useNavigate()
   const [viewMode, toggleViewMode] = useViewMode(`category:${slug}`)
 
@@ -64,7 +74,7 @@ export function CategoryScreen() {
       </div>
 
       {items.length === 0 ? (
-        <EmptyCategory label={category === FALLBACK_CATEGORY ? slug : category.pluralLabel} />
+        <EmptyCategory label={category.pluralLabel} />
       ) : viewMode === 'grid' ? (
         <TileGrid items={items} tileVariant={category.tileVariant} />
       ) : (

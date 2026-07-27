@@ -60,9 +60,37 @@ router.post('/', async (c) => {
   return c.json(rowToCamel(row), 201)
 })
 
+router.put('/:slug', async (c) => {
+  const { userId } = c.get('auth')
+  const { slug } = c.req.param()
+  const body = await c.req.json<Partial<{
+    label: string
+    pluralLabel: string
+    iconName: string
+    accentColor: string
+    tileVariant: string
+  }>>()
+
+  const [row] = await sql`
+    UPDATE categories SET
+      label        = COALESCE(${body.label ?? null}, label),
+      plural_label = COALESCE(${body.pluralLabel ?? null}, plural_label),
+      icon_name    = COALESCE(${body.iconName ?? null}, icon_name),
+      accent_color = COALESCE(${body.accentColor ?? null}, accent_color),
+      tile_variant = COALESCE(${body.tileVariant ?? null}, tile_variant)
+    WHERE slug = ${slug} AND user_id = ${userId}
+    RETURNING slug, label, plural_label, icon_name, accent_color, tile_variant, built_in, "order"
+  `
+  if (!row) return c.json({ error: 'Not found' }, 404)
+  return c.json(rowToCamel(row))
+})
+
 router.delete('/:slug', async (c) => {
   const { userId } = c.get('auth')
   const { slug } = c.req.param()
+
+  // Move items to uncategorised before deleting
+  await sql`UPDATE items SET type = 'uncategorised' WHERE type = ${slug} AND user_id = ${userId}`
 
   const [row] = await sql`
     DELETE FROM categories

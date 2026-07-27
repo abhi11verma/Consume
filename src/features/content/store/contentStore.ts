@@ -11,6 +11,7 @@ interface ContentState {
   addItem: (item: Omit<ConsumeItem, 'id' | 'dateAdded'>) => Promise<void>
   removeItem: (id: string) => Promise<void>
   updateItem: (id: string, updates: Partial<Omit<ConsumeItem, 'id' | 'dateAdded'>>) => Promise<void>
+  removeItems: (ids: string[]) => Promise<void>
 }
 
 export const useContentStore = create<ContentState>((set, get) => ({
@@ -56,6 +57,16 @@ export const useContentStore = create<ContentState>((set, get) => ({
     set({ items: get().items.map((i) => (i.id === id ? { ...i, ...updates } : i)) })
     try {
       await api.put(`/api/items/${id}`, updates)
+    } catch {
+      await get().loadItems()
+    }
+  },
+
+  removeItems: async (ids) => {
+    const idSet = new Set(ids)
+    set({ items: get().items.filter((i) => !idSet.has(i.id)) })
+    try {
+      await api.delete('/api/items/bulk', { ids })
     } catch {
       await get().loadItems()
     }
